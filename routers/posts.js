@@ -49,8 +49,7 @@ router.get('/latestpost', async (req, res) => {
     });
     return res.json(latestPosts);
   } catch (error) {
-    console.error(err);
-    res.status(500).json({ message: 'サーバーエラーです' });
+    res.status(500).json({ message: error + 'サーバーエラーです' });
   }
 });
 
