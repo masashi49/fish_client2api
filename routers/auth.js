@@ -10,11 +10,9 @@ const router = require('express').Router();
 // 新規ユーザー登録API
 // postできるかのテストとして、thunder clientというVScodeアプリを使用した。 post先はhttp://localhost:5001/api/auth/register
 router.post('/register', async (req, res) => {
-  const { username, email, password, profile } = req.body;
+  const { username, email, password } = req.body;
 
   const defaultIconImage = generateIdenticon(email);
-
-  console.log(defaultIconImage);
 
   const hashPassWord = await bcrypt.hash(password, 10); // hash化できる
   const user = await prisma.user.create({
