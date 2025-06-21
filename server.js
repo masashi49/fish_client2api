@@ -8,7 +8,7 @@ const profileRoute = require('./routers/profile');
 
 const cors = require('cors'); // corsのインストールが必要
 
-const PORT = 5001; //  5000だと[nodemon] clean exit - waiting for changes before restart
+const PORT = process.env.PORT || 10000; //  5000だと[nodemon] clean exit - waiting for changes before restart
 
 app.use(cors()); // corsの適用
 app.use(express.json()); // express側に、json形式で送ると宣言しておく
