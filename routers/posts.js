@@ -29,8 +29,7 @@ router.post('/post', isAuthenticated, async (req, res) => {
     });
     res.status(201).json(newPost);
   } catch (erro) {
-    console.error(err);
-    return res.status(500).json({ message: 'サーバーエラーです' });
+    return res.status(500).json({ message: erro + 'サーバーエラーです' });
   }
 });
 
