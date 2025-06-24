@@ -8,7 +8,8 @@ const prisma = new PrismaClient();
 const router = require('express').Router();
 
 // 新規ユーザー登録API
-// postできるかのテストとして、thunder clientというVScodeアプリを使用した。 post先はhttp://localhost:10000/api/auth/register
+// postできるかのテストとして、thunder clientというVScodeアプリを使用した。 post先はhttp://localhost:10000
+// /api/auth/register
 router.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
 

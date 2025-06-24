@@ -5,6 +5,7 @@ const authRoute = require('./routers/auth');
 const postsRoute = require('./routers/posts');
 const usersRoute = require('./routers/users');
 const profileRoute = require('./routers/profile');
+const startServer = require('./routers/startServer');
 
 const cors = require('cors'); // corsのインストールが必要
 
@@ -16,6 +17,7 @@ app.use('/api/auth', authRoute);
 app.use('/api/posts', postsRoute);
 app.use('/api/users', usersRoute);
 app.use('/api/profile', profileRoute);
+app.use('/api/startServer', startServer);
 app.listen(PORT, () => {
   console.log(`server is running on Port ${PORT}`);
 });

@@ -31,6 +31,32 @@ router.get('/:userId', async (req, res) => {
   }
 });
 
+// ユーザープロフィール編集
+router.post('/edit/:userId', async (req, res) => {
+  const { bio, name, id } = req.body;
+
+  try {
+    const updatedUser = await prisma.user.update({
+      where: { id: parseInt(id) },
+      data: {
+        username: name,
+        profile: {
+          update: {
+            bio: bio,
+          },
+        },
+      },
+      include: {
+        profile: true,
+      },
+    });
+
+    res.status(200).json({ message: '更新成功', user: updatedUser });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
 
 // APIのエンドポイントと取得する情報を作成する
