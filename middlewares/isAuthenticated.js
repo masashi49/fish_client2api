@@ -1,17 +1,17 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 // エラーハンドリング用のミドルウェアを作成する
 function isAuthenticated(req, res, next) {
-  const token = req.headers.authorization?.split(' ')[1]; // `Bearer token` の token
+  const token = req.headers.authorization?.split(" ")[1]; // `Bearer token` の token
 
   if (!token) {
-    return res.status(401).json({ message: '権限がありません' });
+    return res.status(401).json({ message: "権限がありません" });
   }
 
   jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
     if (err) {
       console.log(err);
-      return res.status(401).json({ message: '権限がありません' }); // デコードしたけど、元のトークンではなかった
+      return res.status(401).json({ message: "権限がありません" }); // デコードしたけど、元のトークンではなかった
     }
     req.userId = decoded.id;
 

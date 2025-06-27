@@ -1,9 +1,9 @@
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const router = require('express').Router();
+const router = require("express").Router();
 
 // ユーザープロフィール
-router.get('/:userId', async (req, res) => {
+router.get("/:userId", async (req, res) => {
   const { userId } = req.params;
   try {
     const profile = await prisma.profile.findUnique({
@@ -22,7 +22,7 @@ router.get('/:userId', async (req, res) => {
     });
 
     if (!profile) {
-      res.status(404).json({ message: 'プロフィールが見つかりませんでした' });
+      res.status(404).json({ message: "プロフィールが見つかりませんでした" });
     }
 
     res.status(200).json(profile);
@@ -32,9 +32,8 @@ router.get('/:userId', async (req, res) => {
 });
 
 // ユーザープロフィール編集
-router.post('/edit/:userId', async (req, res) => {
+router.post("/edit/:userId", async (req, res) => {
   const { bio, name, id } = req.body;
-
   try {
     const updatedUser = await prisma.user.update({
       where: { id: parseInt(id) },
@@ -51,7 +50,7 @@ router.post('/edit/:userId', async (req, res) => {
       },
     });
 
-    res.status(200).json({ message: '更新成功', user: updatedUser });
+    res.status(200).json({ message: "更新成功", user: updatedUser });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
