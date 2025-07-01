@@ -14,6 +14,8 @@ model User {
   password String
   posts    Post[]
   profile  Profile?
+
+  likePosts Post[] @relation("UserLikePosts")
 }
 
 model Post {
@@ -22,6 +24,8 @@ model Post {
   createdAt DateTime @default(now())
   authorId  Int
   author    User     @relation(fields: [authorId], references: [id])
+
+  likedBy User[] @relation("UserLikePosts")
 }
 
 model Profile {
