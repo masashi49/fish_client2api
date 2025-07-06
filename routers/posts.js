@@ -1,15 +1,15 @@
-const { PrismaClient } = require("@prisma/client");
+const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-const router = require("express").Router();
-const isAuthenticated = require("../middlewares/isAuthenticated");
+const router = require('express').Router();
+const isAuthenticated = require('../middlewares/isAuthenticated');
 
 // つぶやき投稿用API
-router.post("/post", isAuthenticated, async (req, res) => {
+router.post('/post', isAuthenticated, async (req, res) => {
   const { content } = req.body;
   const authorId = req.userId;
 
   if (!content) {
-    return res.status(400).json({ message: "投稿内容がありません" });
+    return res.status(400).json({ message: '投稿内容がありません' });
   }
 
   try {
@@ -29,16 +29,16 @@ router.post("/post", isAuthenticated, async (req, res) => {
     });
     res.status(201).json(newPost);
   } catch (erro) {
-    return res.status(500).json({ message: erro + "サーバーエラーです" });
+    return res.status(500).json({ message: erro + 'サーバーエラーです' });
   }
 });
 
 // 最近呟き取得用API
-router.get("/latestpost", async (req, res) => {
+router.get('/latestpost', async (req, res) => {
   try {
     const latestPosts = await prisma.post.findMany({
       take: 10,
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: 'desc' },
       include: {
         author: {
           include: {
@@ -49,18 +49,18 @@ router.get("/latestpost", async (req, res) => {
     });
     return res.json(latestPosts);
   } catch (error) {
-    res.status(500).json({ message: error + "サーバーエラーです" });
+    res.status(500).json({ message: error + 'サーバーエラーです' });
   }
 });
 
 // 閲覧ユーザーの投稿だけを取得
-router.get("/:userId", async (req, res) => {
+router.get('/:userId', async (req, res) => {
   const { userId } = req.params;
   try {
     const post = await prisma.post.findMany({
       where: { authorId: parseInt(userId) },
       orderBy: {
-        createdAt: "desc",
+        createdAt: 'desc',
       },
       include: {
         author: {
@@ -73,7 +73,7 @@ router.get("/:userId", async (req, res) => {
     });
 
     if (!post) {
-      res.status(404).json({ message: "投稿が見つかりませんでした" });
+      res.status(404).json({ message: '投稿が見つかりませんでした' });
     }
 
     res.status(200).json(post);
