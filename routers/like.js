@@ -6,14 +6,13 @@ const prisma = new PrismaClient();
 const router = require('express').Router();
 
 // postにいいねするAPI
-router.post('/add', isAuthenticated, async (req, res) => {
+router.post('/add', async (req, res) => {
   const { userId, postId } = req.body;
-
   try {
     await prisma.user.update({
       where: { id: userId },
       data: {
-        likedPosts: {
+        likePosts: {
           connect: { id: postId },
         },
       },
