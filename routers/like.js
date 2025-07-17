@@ -6,6 +6,25 @@ const prisma = new PrismaClient();
 const router = require('express').Router();
 
 // postにいいねするAPI
+router.get('/myLike/:userId', async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: parseInt(userId) },
+      include: {
+        likePosts: true,
+      },
+    });
+    if (!user) {
+      return res.status(404).json({ message: 'ユーザーが見つかりません' });
+    }
+    res.status(200).json(user.likePosts);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// postにいいねするAPI
 router.post('/add', async (req, res) => {
   const { userId, postId } = req.body;
   try {
