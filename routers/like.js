@@ -5,14 +5,28 @@ const prisma = new PrismaClient();
 // app.use('/〇〇', router) を指定して、それ以降の「中の道順」は router が受け持つ！
 const router = require('express').Router();
 
-// postにいいねするAPI
+// いいねしたpostを取得するするAPI
 router.get('/myLike/:userId', async (req, res) => {
   const { userId } = req.params;
   try {
     const user = await prisma.user.findUnique({
       where: { id: parseInt(userId) },
       include: {
-        likePosts: true,
+        likePosts: {
+          include: {
+            author: {
+              select: {
+                id: true,
+                username: true,
+                profile: {
+                  select: {
+                    profileImageUrl: true,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     });
     if (!user) {
@@ -43,19 +57,20 @@ router.post('/add', async (req, res) => {
 });
 
 // いいねをはずすするAPI
-router.post('/remove', isAuthenticated, async (req, res) => {
-  const { userId, postId } = req.body;
+router.post('/remove/:userId', isAuthenticated, async (req, res) => {
+  const userId = parseInt(req.params.userId); // ここで URL param を使う
+  const { postId } = req.body; // postId は body から
 
   try {
     await prisma.user.update({
       where: { id: userId },
       data: {
-        likedPosts: {
+        likePosts: {
           disconnect: { id: postId },
         },
       },
     });
-    res.status(200).json({ message: 'いいねを解除しました' });
+    res.status(200).json({ success: true, action: 'unliked', postId: postId });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
