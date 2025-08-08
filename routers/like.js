@@ -23,6 +23,8 @@ router.get('/myLike/:userId', async (req, res) => {
                     profileImageUrl: true,
                   },
                 },
+                // いいねした数をカウントする
+                _count: { select: { likedBy: true } },
               },
             },
           },
@@ -32,7 +34,14 @@ router.get('/myLike/:userId', async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'ユーザーが見つかりません' });
     }
-    res.status(200).json(user.likePosts);
+    const posts = user.likePosts.map((p) => ({
+      ...p,
+      likeCount: p._count.likedBy,
+    }));
+    res.status(200).json({
+      likePosts: user.likePosts,
+      posts,
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
