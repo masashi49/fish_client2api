@@ -21,7 +21,7 @@ router.post('/register', async (req, res) => {
       password: hashPassWord,
       profile: {
         create: {
-          bio: '初めまして',
+          bio: 'プロフィール登録文章です',
           profileImageUrl: defaultIconImage,
         },
       },
@@ -36,7 +36,10 @@ router.post('/register', async (req, res) => {
 // ユーザーログインAPIの作成
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  // prisma.<model名の小文字>.<メソッド>()
+  // prisma.<model名の小文字>.<メソッド>() メソッドはprismaのクエリメソッド
+  // findUniqueは、ユニークな1件を取得するメソッド
+  // whereは、条件を指定するオブジェクト
+  // includeは、関連するデータを取得するためのオプション
   const user = await prisma.user.findUnique({ where: { email } }); // where条件を絞るという意味
 
   if (!user) {
